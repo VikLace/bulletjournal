@@ -18,11 +18,15 @@
     "@typescript-eslint/parser": "^5.21.0",
     "eslint": "^8.14.0",
     "eslint-plugin-svelte3": "^3.4.1",
-    "svelte": "^3.47.0",
+    "svelte": "^3.48.0",
     "svelte-check": "^2.7.0",
     "svelte-preprocess": "^4.10.6",
     "tslib": "^2.4.0",
     "typescript": "~4.6.4"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "firebase": "^9.7.0",
+    "firebaseui": "^6.0.1"
+  }
 }
