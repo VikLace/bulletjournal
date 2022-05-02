@@ -9,6 +9,7 @@
   import type { User } from "firebase/auth";
   import { auth } from "firebaseui";
   import "firebaseui/dist/firebaseui.css";
+  import Tasks from "./../comp/Tasks.svelte";
 
   let user: User = null;
 
@@ -64,6 +65,7 @@
 
 {#if user}
   <h1>Welcome to Your bullet journal, {user.displayName}!</h1>
+  <Tasks />
   <button on:click={signOut}>Sign out</button>
 {:else}
   <h1>Welcome to bullet journal</h1>
