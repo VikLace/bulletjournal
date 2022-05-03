@@ -1,5 +1,17 @@
 <script lang="ts">
-    export let text: string;
+import type { TTask } from "./../types/task.intf";
+
+
+    export let task: TTask;
 </script>
 
-<div>{text}</div>
+<li>
+<input type="checkbox" checked={task.done} />
+<input placeholder="What needs to be done?" value={task.text} />
+</li>
+
+<style>
+    li{
+        list-style-type: none;
+    }
+</style>
