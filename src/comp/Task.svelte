@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type { TTask } from "./../types/task.intf";
-
+    import type { TTask } from "./../types/task.cls";
+    
     export let task: TTask;
 </script>
 

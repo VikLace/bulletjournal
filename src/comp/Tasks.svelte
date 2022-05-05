@@ -13,12 +13,14 @@
   import { getAuth } from "firebase/auth";
   import { onMount } from "svelte";
   import Event from "./Event.svelte";
-  import { TTask } from "./../types/task.intf";
+  import { TTask } from "./../types/task.cls";
   import { TaskType } from "./../types/task.type.enum";
   import Note from "./Note.svelte";
+  import type { FirebaseApp } from "firebase/app";
 
+  export let fbapp: FirebaseApp;
   let tasks: TTask[] = [];
-  const userid = getAuth().currentUser.uid;
+  const userid = getAuth(fbapp).currentUser.uid;
   const tasksRef = collection(getFirestore(), "tasks");
   const tasksQuery = query(tasksRef, where("user_uid", "==", userid));
   async function reloadTasks() {
@@ -46,13 +48,9 @@
       reloadTasks(); //todo: instead of fullreload >> getDoc + tasks[tasks.len] = new?
     });
   };
-
-  const deleteTask = async (ref: DocumentReference) => {
-    await deleteDoc(ref).then(() => reloadTasks()); //todo: instead of fullreload >> tasks[i] = null?
-  };
 </script>
 
-<div class="adduser">
+<div>
   <form on:submit|preventDefault={addTask}>
     <select bind:value={newtasktype}>
       <option value={TaskType.Task}>v</option>
@@ -75,7 +73,7 @@
         {:else if task.type == TaskType.Note}
           <Note note={task} />
         {/if}
-        <button title="Delete" on:click={() => deleteTask(task.ref)}>
+        <button title="Delete" on:click={() => task.Delete()}>
           <svg width="18" height="18" viewBox="0 0 18 18">
             <path
               d="M15 4.41 13.59 3 9 7.59 4.41 3 3 4.41 7.59 9 3 13.59 4.41 15 9 10.41 13.59 15 15 13.59 10.41 9 15 4.41Z"
@@ -86,7 +84,7 @@
     {/each}
   </ul>
 {:else}
-  <p>no data found</p>
+  <p>no tasks found</p>
 {/if}
 
 <style>

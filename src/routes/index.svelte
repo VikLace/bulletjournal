@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { initializeApp } from "firebase/app";
+  import { initializeApp, type FirebaseApp } from "firebase/app";
   import {
     GoogleAuthProvider,
     getAuth,
@@ -10,6 +10,7 @@
   import { auth } from "firebaseui";
   import "firebaseui/dist/firebaseui.css";
   import Tasks from "./../comp/Tasks.svelte";
+  import Collections from "./../comp/Collections.svelte";
 
   let user: User = null;
 
@@ -39,14 +40,15 @@
 
   const addSignInUI = () => {
     if (!user) {
-      if (!ui) ui = new auth.AuthUI(getAuth());
+      if (!ui) ui = new auth.AuthUI(getAuth(fbapp));
       ui.start("#firebaseui-auth-container", uiConfig);
     }
   };
 
+  let fbapp: FirebaseApp = null;
   onMount(() => {
-    initializeApp(firebaseConfig);
-    onAuthStateChanged(getAuth(), (u) => {
+    fbapp = initializeApp(firebaseConfig);
+    onAuthStateChanged(getAuth(fbapp), (u) => {
       user = u;
     });
     addSignInUI();
@@ -54,7 +56,7 @@
 
   const signOut = () => {
     if (user) {
-      getAuth()
+      getAuth(fbapp)
         .signOut()
         .then(() => {
           addSignInUI();
@@ -65,7 +67,8 @@
 
 {#if user}
   <h1>Welcome to Your bullet journal, {user.displayName}!</h1>
-  <Tasks />
+  <Tasks {fbapp} />
+  <Collections {fbapp} />
   <button on:click={signOut}>Sign out</button>
 {:else}
   <h1>Welcome to bullet journal</h1>
