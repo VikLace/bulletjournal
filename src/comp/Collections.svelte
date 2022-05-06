@@ -12,12 +12,11 @@
   import { getAuth } from "firebase/auth";
   import { onMount } from "svelte";
   import { TCollection } from "../types/collection.cls";
-  import type { FirebaseApp } from "firebase/app";
+  import { fbapp } from "./../stores/fbapp";
 
-  export let fbapp: FirebaseApp;
   let colls: TCollection[] = [];
-  const userid = getAuth(fbapp).currentUser.uid;
-  const collsRef = collection(getFirestore(fbapp), "collections");
+  const userid = getAuth($fbapp).currentUser.uid;
+  const collsRef = collection(getFirestore($fbapp), "collections");
   const collsQuery = query(collsRef, where("user_uid", "==", userid));
   async function reloadColls() {
     colls = [];

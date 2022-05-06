@@ -7,7 +7,6 @@
     where,
     getDocs,
     addDoc,
-    deleteDoc,
     DocumentReference,
   } from "firebase/firestore";
   import { getAuth } from "firebase/auth";
@@ -16,11 +15,10 @@
   import { TTask } from "./../types/task.cls";
   import { TaskType } from "./../types/task.type.enum";
   import Note from "./Note.svelte";
-  import type { FirebaseApp } from "firebase/app";
+  import { fbapp } from "./../stores/fbapp";
 
-  export let fbapp: FirebaseApp;
   let tasks: TTask[] = [];
-  const userid = getAuth(fbapp).currentUser.uid;
+  const userid = getAuth($fbapp).currentUser.uid;
   const tasksRef = collection(getFirestore(), "tasks");
   const tasksQuery = query(tasksRef, where("user_uid", "==", userid));
   async function reloadTasks() {
