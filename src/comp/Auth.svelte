@@ -15,7 +15,7 @@
   };
 
   const addSignInUI = async () => {
-    if (browser && !$fbuser) {
+    if (browser && $fbauth && !$fbuser) {
       const { auth } = await import("firebaseui");
       let ui = auth.AuthUI.getInstance() ?? new auth.AuthUI($fbauth);
       ui.start("#firebaseui-auth-container", uiConfig);
