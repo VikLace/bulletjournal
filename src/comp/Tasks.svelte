@@ -9,23 +9,29 @@
     addDoc,
     DocumentReference,
   } from "firebase/firestore";
-  import { getAuth } from "firebase/auth";
   import { onMount } from "svelte";
   import Event from "./Event.svelte";
   import { TTask } from "./../types/task.cls";
   import { TaskType } from "./../types/task.type.enum";
   import Note from "./Note.svelte";
+  import { fbuser } from "./../stores/fbuser";
   import { fbapp } from "./../stores/fbapp";
 
   let tasks: TTask[] = [];
-  const userid = getAuth($fbapp).currentUser.uid;
-  const tasksRef = collection(getFirestore(), "tasks");
-  const tasksQuery = query(tasksRef, where("user_uid", "==", userid));
+
+  let tasksRef = null;
+  $: $fbapp, (tasksRef = $fbapp ? collection(getFirestore($fbapp), "tasks") : null);
+
+  let tasksQuery = null;
+  $: $fbuser, tasksRef,
+    (tasksQuery = $fbuser && tasksRef ? query(tasksRef, where("user_uid", "==", $fbuser.uid)) : null);
+
   async function reloadTasks() {
     tasks = [];
-    (await getDocs(tasksQuery)).docs.forEach((d, i) => {
-      tasks[i] = new TTask(d);
-    });
+    if (tasksQuery)
+      (await getDocs(tasksQuery)).docs.forEach((d, i) => {
+        tasks[i] = new TTask(d);
+      });
   }
   onMount(async () => {
     await reloadTasks();
@@ -35,7 +41,7 @@
   let newtasktext: string = null;
   const addTask = async () => {
     addDoc(tasksRef, {
-      user_uid: userid,
+      user_uid: $fbuser.uid,
       date: Math.floor(Date.now() / 8.64e7),
       type: newtasktype,
       text: newtasktext,

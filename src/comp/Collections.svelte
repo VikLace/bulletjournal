@@ -9,20 +9,26 @@
     addDoc,
     DocumentReference,
   } from "firebase/firestore";
-  import { getAuth } from "firebase/auth";
   import { onMount } from "svelte";
   import { TCollection } from "../types/collection.cls";
   import { fbapp } from "./../stores/fbapp";
+  import { fbuser } from "./../stores/fbuser";
 
   let colls: TCollection[] = [];
-  const userid = getAuth($fbapp).currentUser.uid;
-  const collsRef = collection(getFirestore($fbapp), "collections");
-  const collsQuery = query(collsRef, where("user_uid", "==", userid));
+
+  let collsRef = null;
+  $: $fbapp, (collsRef = $fbapp ? collection(getFirestore($fbapp), "collections") : null);
+
+  let collsQuery = null;
+  $: $fbuser, collsRef,
+    (collsQuery = $fbuser && collsRef ? query(collsRef, where("user_uid", "==", $fbuser.uid)) : null);
+
   async function reloadColls() {
     colls = [];
-    (await getDocs(collsQuery)).docs.forEach((d, i) => {
-      colls[i] = new TCollection(d);
-    });
+    if (collsQuery)
+      (await getDocs(collsQuery)).docs.forEach((d, i) => {
+        colls[i] = new TCollection(d);
+      });
   }
   onMount(async () => {
     await reloadColls();
@@ -32,7 +38,7 @@
   let newcolltext: string = null;
   const addColl = async () => {
     addDoc(collsRef, {
-      user_uid: userid,
+      user_uid: $fbuser.uid,
       title: newcolltitle,
       text: newcolltext,
       last_modified: Date.now(),
