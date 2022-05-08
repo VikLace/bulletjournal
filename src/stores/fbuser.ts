@@ -16,7 +16,8 @@ function createFirebaseUser() {
       }
     }
     init();
-    return () => unsubscribe();
+    console.log("fbuser subscribe");
+    return () => { unsubscribe(); console.log("fbuser unsubscribe") }
   })
 
   return {

@@ -1,53 +1,14 @@
 <script lang="ts">
   import Collection from "./Collection.svelte";
-  import {
-    getFirestore,
-    collection,
-    query,
-    where,
-    getDocs,
-    addDoc,
-    DocumentReference,
-  } from "firebase/firestore";
-  import { onMount } from "svelte";
-  import { TCollection } from "../types/collection.cls";
-  import { fbapp } from "./../stores/fbapp";
-  import { fbuser } from "./../stores/fbuser";
-
-  let colls: TCollection[] = [];
-
-  let collsRef = null;
-  $: $fbapp, (collsRef = $fbapp ? collection(getFirestore($fbapp), "collections") : null);
-
-  let collsQuery = null;
-  $: $fbuser, collsRef,
-    (collsQuery = $fbuser && collsRef ? query(collsRef, where("user_uid", "==", $fbuser.uid)) : null);
-
-  async function reloadColls() {
-    colls = [];
-    if (collsQuery)
-      (await getDocs(collsQuery)).docs.forEach((d, i) => {
-        colls[i] = new TCollection(d);
-      });
-  }
-  onMount(async () => {
-    await reloadColls();
-  });
+  import { collections } from "./../stores/collections";
 
   let newcolltitle: string = null;
   let newcolltext: string = null;
-  const addColl = async () => {
-    addDoc(collsRef, {
-      user_uid: $fbuser.uid,
-      title: newcolltitle,
-      text: newcolltext,
-      last_modified: Date.now(),
-    }).then((ref: DocumentReference) => {
-      newcolltitle = null;
-      newcolltext = null;
-      reloadColls(); //todo: instead of fullreload >> getDoc + colls[colls.len] = new?
-    });
-  };
+  const addColl = () => {
+    collections.addCollection(newcolltitle, newcolltext);
+    newcolltitle = null;
+    newcolltext = null;
+  }
 </script>
 
 <div>
@@ -58,10 +19,10 @@
   </form>
 </div>
 
-{#if colls.length > 0}
+{#if $collections && $collections.length > 0}
   <div id="collgrid">
-    {#each colls as coll}
-      <Collection {coll} on:afterdelete={() => reloadColls()} />
+    {#each $collections as coll}
+      <Collection {coll}/>
     {/each}
   </div>
 {:else}
