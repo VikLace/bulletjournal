@@ -11,6 +11,7 @@
   }
 </script>
 
+{#if $collections}
 <div>
   <form on:submit|preventDefault={addColl}>
     <input type="text" bind:value={newcolltitle} />
@@ -18,6 +19,7 @@
     <button>add</button>
   </form>
 </div>
+{/if}
 
 {#if $collections && $collections.length > 0}
   <div id="collgrid">

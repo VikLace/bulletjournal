@@ -11,18 +11,13 @@ const firebaseConfig = {
 };
 
 function createFirebaseApp() {
-  let fbapp: FirebaseApp = null;
 
-  const { subscribe } = readable<FirebaseApp>(undefined, set => {
-    fbapp = initializeApp(firebaseConfig);
+  const { subscribe } = readable<FirebaseApp>(null, set => {
+    let fbapp = initializeApp(firebaseConfig);
     set(fbapp);
+    console.log("fbapp subscribe");
 
-    async function unsubscribe() {
-      const { deleteApp } = await import("firebase/app");
-      await deleteApp(fbapp);
-    }
-
-    return () => unsubscribe();
+    return () => { console.log("fbapp unsubscribe") };
   })
 
   return {

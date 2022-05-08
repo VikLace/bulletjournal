@@ -1,33 +1,23 @@
-import { readable } from 'svelte/store'
-import type { Auth } from 'firebase/auth'
+import { derived } from 'svelte/store'
+import { getAuth, type Auth } from 'firebase/auth'
 import { browser } from '$app/env'
+import { fbapp } from './fbapp';
 
 function createFirebaseAuth() {
-  let fbauth: Auth = null;
+  let fba: Auth = null;
 
-  const { subscribe } = readable<Auth>(undefined, set => {
-    async function init() {
-      if (browser) {
-        const { fbapp } = await import('./fbapp');
-        const { getAuth } = await import('firebase/auth');
-        fbapp.subscribe((app) => {
-          if (app) {
-            fbauth = getAuth(app);
-            set(fbauth)
-          }
-        });
-      }
-      else {
-        set(null)
-      }
-    }
-    init();
-    return () => { };
-  })
+  const { subscribe } = derived<typeof fbapp, Auth>(fbapp, ($fbapp, set) => {
+    fba = browser && $fbapp ? getAuth($fbapp) : null;
+    set(fba);
+    console.log("fbauth subscribe");
+    return () => { console.log("fbauth unsubscribe") };
+  }, null)
 
   async function signOut() {
-    const { signOut } = await import('firebase/auth')
-    await signOut(fbauth);
+    if (fba) {
+      const { signOut } = await import('firebase/auth')
+      await signOut(fba);
+    }
   }
 
   return {

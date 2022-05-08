@@ -1,24 +1,20 @@
-import { readable } from 'svelte/store'
-import type { User } from 'firebase/auth'
+import { derived } from 'svelte/store'
+import { onAuthStateChanged, type User } from 'firebase/auth'
 import { browser } from '$app/env'
+import { fbauth } from './fbauth'
 
 function createFirebaseUser() {
-  const { subscribe } = readable<User>(undefined, set => {
+  const { subscribe } = derived<typeof fbauth, User>(fbauth, ($fbauth, set) => {
     let unsubscribe = () => { };
-    async function init() {
-      if (browser) {
-        const { fbauth } = await import('./fbauth');
-        const { onAuthStateChanged } = await import('firebase/auth');
-        fbauth.subscribe((auth) => { if (auth) { unsubscribe = onAuthStateChanged(auth, set) } });
-      }
-      else {
-        set(null)
-      }
+    if (browser && $fbauth) {
+      unsubscribe = onAuthStateChanged($fbauth, set);
     }
-    init();
+    else {
+      set(null)
+    }
     console.log("fbuser subscribe");
     return () => { unsubscribe(); console.log("fbuser unsubscribe") }
-  })
+  }, null)
 
   return {
     subscribe

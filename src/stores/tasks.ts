@@ -1,44 +1,45 @@
 import { collection, getFirestore, onSnapshot, query, where, addDoc } from 'firebase/firestore';
-import { TCollection } from './../types/collection.cls';
+import { TTask } from './../types/task.cls';
 import { derived } from 'svelte/store';
 import { fbapp } from './fbapp';
 import { fbuser } from './fbuser';
+import type { TaskType } from './../types/task.type.enum';
 
-function createCollectionsStore() {
+function createTasksStore() {
   let colref = null;
   let uid: string = null;
   let unsub = () => { };
 
-  const { subscribe } = derived<[typeof fbapp, typeof fbuser], TCollection[]>([fbapp, fbuser], ([$fbapp, $fbuser], set) => {
+  const { subscribe } = derived<[typeof fbapp, typeof fbuser], TTask[]>([fbapp, fbuser], ([$fbapp, $fbuser], set) => {
     unsub();
     if ($fbapp && $fbuser) {
       uid = $fbuser.uid;
-      colref = collection(getFirestore($fbapp), "collections");
+      colref = collection(getFirestore($fbapp), "tasks");
       const qry = query(colref, where("user_uid", "==", uid));
       unsub = onSnapshot(qry, (ss) => {
-        let cols = [];
-        ss.docs.forEach((d, i) => { cols[i] = new TCollection(d) });
-        set(cols);
+        let arr = [];
+        ss.docs.forEach((d, i) => { arr[i] = new TTask(d) });
+        set(arr);
       })
     }
-    else
-    {
+    else {
       colref = null;
       uid = null;
       set([]);
       unsub = () => { };
     }
 
-    console.log("collections subscribe");
+    console.log("tasks subscribe");
 
-    return () => { unsub(); console.log("collections unsubscribe") };
-  },[])
+    return () => { unsub(); console.log("tasks unsubscribe") };
+  }, [])
 
-  function addCollection(title: string, text: string) {
+  function addTask(type: TaskType, text: string) {
     if (colref && uid) {
       addDoc(colref, {
         user_uid: uid,
-        title: title,
+        date: Math.floor(Date.now() / 8.64e7),
+        type: type,
         text: text,
         last_modified: Date.now(),
       })
@@ -47,8 +48,8 @@ function createCollectionsStore() {
 
   return {
     subscribe,
-    addCollection
+    addTask
   }
 }
 
-export const collections = createCollectionsStore();
+export const tasks = createTasksStore();
