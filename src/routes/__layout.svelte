@@ -1,59 +1,55 @@
 <nav>
-<h1>bulledjurnal</h1>
+  <div id="logo">bulledjurnal</div>
 
-<ul>
-  <li><a href="/">Home</a></li>
-  <li><a href="/planner">Planner</a></li>
-  <li><a href="/calendar">Calendar</a></li>
-  <li><a href="/collections">Collections</a></li>
-</ul>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/planner">Planner</a></li>
+    <li><a href="/calendar">Calendar</a></li>
+    <li><a href="/collections">Collections</a></li>
+  </ul>
 
-<div id="usermenu">usermenu</div>
-
+  <div id="usermenu">usermenu</div>
 </nav>
 
-<slot>
-
-</slot>
+<slot />
 
 <style>
-  nav{
+  nav {
     display: flex;
-    width: 50%;
     flex-direction: row;
-    justify-content: space-between;
-    align-content: space-between;
+    justify-content: center;
   }
 
-  h1{
-    display: block;
+  #logo {
+    line-height: 6vh;
+    padding: 14px 16px;
+    text-align: center;
   }
 
-  #usermenu{
+  #usermenu {
     display: block;
+    line-height: 6vh;
+    padding: 14px 16px;
+    text-align: center;
   }
 
   ul {
-    list-style-type: none;
+    display: flex;
+    flex-direction: row;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    list-style-type: none;
     background-color: #333;
-  }
-
-  li {
-    float: left;
   }
 
   li a {
     display: block;
     color: white;
     text-align: center;
+    line-height: 6vh;
     padding: 14px 16px;
     text-decoration: none;
   }
-
-  /* Change the link color to #111 (black) on hover */
   li a:hover {
     background-color: #111;
   }

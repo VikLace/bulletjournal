@@ -56,13 +56,18 @@
 {/if}
 
 <style>
+  #calendar{
+    padding: 50px;
+    width: 240px;
+  }
   #monthyear {
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
+    padding-bottom: 20px;
   }
   #days {
     display: grid;
-    width: 210px;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px 1px;
   }
