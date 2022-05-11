@@ -5,9 +5,9 @@
 </script>
 
 <div id="tasktype_choice">
-  <div id="kebab_wrap">
+  <div class="relative-wrap">
     <div id="kebab">
-      <svg id="kebab_svg" viewBox="0 0 16 16">
+      <svg class="svg_80" id="kebab_svg" viewBox="0 0 16 16">
         <g transform="rotate(90 8 8)">
           <path fill="currentColor" d="M8 9a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3zM1.5 9a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3zm13 0a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3z"/>
         </g>
@@ -25,11 +25,11 @@
       </div>
     </div>
   </div>
-  {#if type}
-    <svg viewBox="0 0 16 16">
+  <div id="chosen-type-wrap" class="relative-wrap">
+    <svg class="svg_80" class:no-value={!type} viewBox="0 0 16 16">
       <path fill="currentColor" d={getTaskTypeSVGPath(type)} />
     </svg>
-  {/if}
+  </div>
 </div>
 
 <style>
@@ -42,7 +42,7 @@
   #tasktype_choice:hover #kebab{
     display: block;
   }
-  #kebab_wrap{
+  .relative-wrap{
     position: relative;
   }
   #kebab{
@@ -59,13 +59,15 @@
   #kebab:hover{
     background-color: lightblue;
   }
-  #kebab_svg{
-    color: blueviolet;
+  .svg_80{
     position:absolute;
     left:10%; 
     top:10%; 
     width:80%; 
     height:80%;
+  }
+  #kebab_svg{
+    color: blueviolet; 
   }
   #kebab:hover #kebab-popup{
     display: flex;
@@ -95,5 +97,12 @@
   }
   #kebab-popup svg:hover{
     background-color: lightblue;
+  }
+  #chosen-type-wrap{
+    height: 100%;
+    width: 100%;
+  }
+  .no-value{
+    color: gray;
   }
 </style>
