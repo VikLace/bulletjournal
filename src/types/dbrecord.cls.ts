@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, getFirestore, type DocumentData, type DocumentReference } from 'firebase/firestore';
+import { deleteDoc, updateDoc, type DocumentData, type DocumentReference } from 'firebase/firestore';
 
 export abstract class TDBRecord {
   id: string;
@@ -6,24 +6,30 @@ export abstract class TDBRecord {
   user_uid: string;
   last_modified: number;
 
-  constructor(data: DocumentData) {
-    this.id = data.id;
-    this.ref = data.ref;
-    let d = data.data();
-    this.user_uid = d.user_uid;
-    this.last_modified = d.last_modified;
-    this.LoadAdditionalData(d);
-
-    // this.colref = collection(getFirestore(), "collections");
+  constructor(data?: DocumentData) {
+    if (data)
+    {
+      this.id = data.id;
+      this.ref = data.ref;
+      let d = data.data();
+      this.user_uid = d.user_uid;
+      this.last_modified = d.last_modified;
+      this.LoadAdditionalData(d);
+    }
   }
 
   protected abstract LoadAdditionalData(d: any): void;
-
-  // public async Insert(obj: Object): Promise<DocumentReference> {
-  //   return await addDoc(obj);
-  // }
+  protected abstract SaveAdditionalData(): {};
 
   public async Delete(): Promise<void> {
     await deleteDoc(this.ref);
+  }
+
+  private toUpdateData(): {}{
+    return { last_modified: Date.now(), ...this.SaveAdditionalData() };
+  }
+
+  public async Update(): Promise<void>{
+    await updateDoc(this.ref, this.toUpdateData());
   }
 }

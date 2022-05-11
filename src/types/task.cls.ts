@@ -17,4 +17,16 @@ export class TTask extends TDBRecord {
     if (d.start) this.start = d.start;
     if (d.duration) this.duration = d.duration;
   }
+
+  protected SaveAdditionalData(): {} {
+    let res: {} = {
+      date: this.date,
+      text: this.text,
+      type: this.type
+    };
+    if (this.done != null) res = {...res, done: this.done};
+    if (this.start != null) res = {...res, start: this.start};
+    if (this.duration != null) res = {...res, duration: this.duration};
+    return res;
+  }
 }
