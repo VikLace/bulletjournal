@@ -4,6 +4,7 @@
   import { TaskType } from "./../types/task.type.enum";
   import Note from "./Note.svelte";
   import { tasks } from "./../stores/tasks";
+import TaskTypeBox from "./TaskTypeBox.svelte";
 
   let newtasktype: TaskType = null;
   let newtasktext: string = null;
@@ -14,11 +15,7 @@
   {#if $tasks}
     <div>
       <form on:submit|preventDefault={addTask}>
-        <select bind:value={newtasktype}>
-          <option value={TaskType.Task}>v</option>
-          <option value={TaskType.Event}>o</option>
-          <option value={TaskType.Note}>-</option>
-        </select>
+        <TaskTypeBox bind:type={newtasktype} />
         <input type="text" bind:value={newtasktext} />
         <button>add</button>
       </form>
