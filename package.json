@@ -14,8 +14,8 @@
   "devDependencies": {
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
-    "@typescript-eslint/eslint-plugin": "^5.22.0",
-    "@typescript-eslint/parser": "^5.22.0",
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
     "eslint": "^8.15.0",
     "eslint-plugin-svelte3": "^4.0.0",
     "svelte": "^3.48.0",
@@ -26,7 +26,7 @@
   },
   "type": "module",
   "dependencies": {
-    "firebase": "^9.8.0",
+    "firebase": "^9.8.1",
     "firebaseui": "^6.0.1"
   }
 }
