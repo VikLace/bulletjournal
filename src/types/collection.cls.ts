@@ -8,4 +8,11 @@ export class TCollection extends TDBRecord {
     this.title = d.title;
     this.text = d.text;
   }
+
+  protected SaveAdditionalData(): {} {
+    return {
+      title: this.title,
+      text: this.text
+    };
+  }
 }

@@ -1,3 +1,7 @@
+<script>
+  import Error from "./../comp/Error.svelte";
+</script>
+
 <nav class="flexbar">
   <div id="logo" class="flexbar-item">bulledjurnal</div>
 
@@ -10,6 +14,8 @@
 
   <div id="usermenu" class="flexbar-item">usermenu</div>
 </nav>
+
+<Error/>
 
 <slot />
 

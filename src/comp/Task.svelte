@@ -1,18 +1,18 @@
 <script lang="ts">
+  import { currentError } from "./../stores/error";
   import { tasks } from "./../stores/tasks";
   import { TTask } from "./../types/task.cls";
   import { TaskType, getTaskTypeSVGPath } from "./../types/task.type.enum";
 
-  let error_message: string = null;
   const addTask = () => {
     if (task.type && task.text)
     {
-      error_message = null;
+      $currentError = null;
       tasks.addTask(task.type, task.text);
       task = new TTask();
     }
     else
-      error_message = "Nav aizpildīti visi obligātie lauki!";
+      $currentError = "Nav aizpildīti visi obligātie lauki!";
   }
 
   const updateTask = () => {
@@ -20,20 +20,17 @@
     {
       if (task.type && task.text)
       {
-        error_message = null;
+        $currentError = null;
         task.Update();
       }
       else
-        error_message = "Nav aizpildīti visi obligātie lauki!";
+        $currentError = "Nav aizpildīti visi obligātie lauki!";
     }
   }
 
   export let task: TTask = null;
 </script>
 
-{#if error_message}
-<p class="error-message">{error_message}</p>
-{/if}
 <div class="task-form">
   <div id="tasktype_choice">
     <div class="relative-wrap">
@@ -82,10 +79,6 @@
 </div>
 
 <style>
-  .error-message{
-    color: red;
-    font-size: small;
-  }
   .task-form{
     height: 26px;
     width: 340px;
