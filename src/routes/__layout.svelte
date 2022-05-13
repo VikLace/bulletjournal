@@ -1,15 +1,24 @@
 <script>
+import { page } from "$app/stores";
+
   import Error from "./../comp/Error.svelte";
+
+  const menuitems = [
+    {path:"/", name:"Home"},
+    {path:"/planner", name:"Planner"},
+    {path:"/calendar", name:"Calendar"},
+    {path:"/collections", name:"Collections"},
+    {path:"/collections_new", name:"New Collections"},
+  ];
 </script>
 
 <nav class="flexbar">
   <div id="logo" class="flexbar-item">bulledjurnal</div>
 
   <ul>
-    <li class="flexbar-item"><a href="/">Home</a></li>
-    <li class="flexbar-item"><a href="/planner">Planner</a></li>
-    <li class="flexbar-item"><a href="/calendar">Calendar</a></li>
-    <li class="flexbar-item"><a href="/collections">Collections</a></li>
+    {#each menuitems as item}
+    <li class="flexbar-item hoverable" class:active-menu={$page.url.pathname === item.path}><a href={item.path}>{item.name}</a></li> 
+    {/each}
   </ul>
 
   <div id="usermenu" class="flexbar-item">usermenu</div>
@@ -17,10 +26,12 @@
 
 <Error/>
 
+<div id="content">
 <slot />
+</div>
 
 <footer class="flexbar">
-  <svg id="svg-firebase" class="footer-svg flexbar-item" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 351">
+  <svg id="svg-firebase" class="footer-svg flexbar-item hoverable" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 351">
     <defs>
       <filter id="svgIDb" width="200%" height="200%" x="-50%" y="-50%" filterUnits="objectBoundingBox">
         <feGaussianBlur in="SourceAlpha" result="shadowBlurInner1" stdDeviation="17.5"/>
@@ -48,25 +59,29 @@
     <path fill="#FCCA3F" d="M254.354 282.16L221.402 79.218c-1.03-6.35-7.558-8.977-12.103-4.424L1.29 282.6l114.339 63.908a23.943 23.943 0 0 0 23.334.006l115.392-64.355Z"/>
     <path fill="#EEAB37" d="M139.12 345.64a24.126 24.126 0 0 1-23.512-.005L.931 282.015l-.93.983l115.607 64.548a24.126 24.126 0 0 0 23.513.005l116.275-64.847l-.285-1.752l-115.99 64.689Z"/>
   </svg>
-  <svg id="svg-google-cloud" class="footer-svg flexbar-item" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 206">
+  <svg id="svg-google-cloud" class="footer-svg flexbar-item hoverable" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 206">
     <path fill="#EA4335" d="m170.252 56.819l22.253-22.253l1.483-9.37C153.437-11.677 88.976-7.496 52.42 33.92C42.267 45.423 34.734 59.764 30.717 74.573l7.97-1.123l44.505-7.34l3.436-3.513c19.797-21.742 53.27-24.667 76.128-6.168l7.496.39Z"/><path fill="#4285F4" d="M224.205 73.918a100.249 100.249 0 0 0-30.217-48.722l-31.232 31.232a55.515 55.515 0 0 1 20.379 44.037v5.544c15.35 0 27.797 12.445 27.797 27.796c0 15.352-12.446 27.485-27.797 27.485h-55.671l-5.466 5.934v33.34l5.466 5.231h55.67c39.93.311 72.553-31.494 72.864-71.424a72.303 72.303 0 0 0-31.793-60.453"/><path fill="#34A853" d="M71.87 205.796h55.593V161.29H71.87a27.275 27.275 0 0 1-11.399-2.498l-7.887 2.42l-22.409 22.253l-1.952 7.574c12.567 9.489 27.9 14.825 43.647 14.757"/><path fill="#FBBC05" d="M71.87 61.425C31.94 61.664-.237 94.228.001 134.159a72.301 72.301 0 0 0 28.222 56.88l32.248-32.246c-13.99-6.322-20.208-22.786-13.887-36.776c6.32-13.99 22.786-20.208 36.775-13.888a27.796 27.796 0 0 1 13.887 13.888l32.248-32.248A72.224 72.224 0 0 0 71.87 61.425"/>
   </svg>
-  <svg id="svg-svelte" class="footer-svg flexbar-item" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 308">
+  <svg id="svg-svelte" class="footer-svg flexbar-item hoverable" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 308">
     <path fill="#FF3E00" d="M239.682 40.707C211.113-.182 154.69-12.301 113.895 13.69L42.247 59.356a82.198 82.198 0 0 0-37.135 55.056a86.566 86.566 0 0 0 8.536 55.576a82.425 82.425 0 0 0-12.296 30.719a87.596 87.596 0 0 0 14.964 66.244c28.574 40.893 84.997 53.007 125.787 27.016l71.648-45.664a82.182 82.182 0 0 0 37.135-55.057a86.601 86.601 0 0 0-8.53-55.577a82.409 82.409 0 0 0 12.29-30.718a87.573 87.573 0 0 0-14.963-66.244"/><path fill="#FFF" d="M106.889 270.841c-23.102 6.007-47.497-3.036-61.103-22.648a52.685 52.685 0 0 1-9.003-39.85a49.978 49.978 0 0 1 1.713-6.693l1.35-4.115l3.671 2.697a92.447 92.447 0 0 0 28.036 14.007l2.663.808l-.245 2.659a16.067 16.067 0 0 0 2.89 10.656a17.143 17.143 0 0 0 18.397 6.828a15.786 15.786 0 0 0 4.403-1.935l71.67-45.672a14.922 14.922 0 0 0 6.734-9.977a15.923 15.923 0 0 0-2.713-12.011a17.156 17.156 0 0 0-18.404-6.832a15.78 15.78 0 0 0-4.396 1.933l-27.35 17.434a52.298 52.298 0 0 1-14.553 6.391c-23.101 6.007-47.497-3.036-61.101-22.649a52.681 52.681 0 0 1-9.004-39.849a49.428 49.428 0 0 1 22.34-33.114l71.664-45.677a52.218 52.218 0 0 1 14.563-6.398c23.101-6.007 47.497 3.036 61.101 22.648a52.685 52.685 0 0 1 9.004 39.85a50.559 50.559 0 0 1-1.713 6.692l-1.35 4.116l-3.67-2.693a92.373 92.373 0 0 0-28.037-14.013l-2.664-.809l.246-2.658a16.099 16.099 0 0 0-2.89-10.656a17.143 17.143 0 0 0-18.398-6.828a15.786 15.786 0 0 0-4.402 1.935l-71.67 45.674a14.898 14.898 0 0 0-6.73 9.975a15.9 15.9 0 0 0 2.709 12.012a17.156 17.156 0 0 0 18.404 6.832a15.841 15.841 0 0 0 4.402-1.935l27.345-17.427a52.147 52.147 0 0 1 14.552-6.397c23.101-6.006 47.497 3.037 61.102 22.65a52.681 52.681 0 0 1 9.003 39.848a49.453 49.453 0 0 1-22.34 33.12l-71.664 45.673a52.218 52.218 0 0 1-14.563 6.398"/>
   </svg>
-  <svg id="svg-github" class="footer-svg flexbar-item" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 250">
+  <svg id="svg-github" class="footer-svg flexbar-item hoverable" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 250">
     <path fill="#161614" d="M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46c6.397 1.185 8.746-2.777 8.746-6.158c0-3.052-.12-13.135-.174-23.83c-35.61 7.742-43.124-15.103-43.124-15.103c-5.823-14.795-14.213-18.73-14.213-18.73c-11.613-7.944.876-7.78.876-7.78c12.853.902 19.621 13.19 19.621 13.19c11.417 19.568 29.945 13.911 37.249 10.64c1.149-8.272 4.466-13.92 8.127-17.116c-28.431-3.236-58.318-14.212-58.318-63.258c0-13.975 5-25.394 13.188-34.358c-1.329-3.224-5.71-16.242 1.24-33.874c0 0 10.749-3.44 35.21 13.121c10.21-2.836 21.16-4.258 32.038-4.307c10.878.049 21.837 1.47 32.066 4.307c24.431-16.56 35.165-13.12 35.165-13.12c6.967 17.63 2.584 30.65 1.255 33.873c8.207 8.964 13.173 20.383 13.173 34.358c0 49.163-29.944 59.988-58.447 63.157c4.591 3.972 8.682 11.762 8.682 23.704c0 17.126-.148 30.91-.148 35.126c0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002C256 57.307 198.691 0 128.001 0Zm-80.06 182.34c-.282.636-1.283.827-2.194.39c-.929-.417-1.45-1.284-1.15-1.922c.276-.655 1.279-.838 2.205-.399c.93.418 1.46 1.293 1.139 1.931Zm6.296 5.618c-.61.566-1.804.303-2.614-.591c-.837-.892-.994-2.086-.375-2.66c.63-.566 1.787-.301 2.626.591c.838.903 1 2.088.363 2.66Zm4.32 7.188c-.785.545-2.067.034-2.86-1.104c-.784-1.138-.784-2.503.017-3.05c.795-.547 2.058-.055 2.861 1.075c.782 1.157.782 2.522-.019 3.08Zm7.304 8.325c-.701.774-2.196.566-3.29-.49c-1.119-1.032-1.43-2.496-.726-3.27c.71-.776 2.213-.558 3.315.49c1.11 1.03 1.45 2.505.701 3.27Zm9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033c-1.448-.439-2.395-1.613-2.103-2.626c.301-1.01 1.747-1.484 3.207-1.028c1.446.436 2.396 1.602 2.095 2.622Zm10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95c-1.53.034-2.769-.82-2.786-1.86c0-1.065 1.202-1.932 2.733-1.958c1.522-.03 2.768.818 2.768 1.868Zm10.555-.405c.182 1.03-.875 2.088-2.387 2.37c-1.485.271-2.861-.365-3.05-1.386c-.184-1.056.893-2.114 2.376-2.387c1.514-.263 2.868.356 3.061 1.403Z"/>
   </svg>
 </footer>
 
 <style>
+  #content {
+    flex-grow: 1;
+    margin: 1vh;
+  }
   .flexbar {
     height: 8vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-color:ivory;
+    background-color:rgb(210, 228, 255);
   }
   .flexbar-item{
     height: 4vh;
@@ -75,8 +90,11 @@
     text-align: center;
     user-select: none;
   }
-  .flexbar-item:hover{
-    background-color: rgb(235, 235, 235);
+  .hoverable:hover{
+    background-color: rgb(182, 211, 255);
+  }
+  .active-menu{
+    background-color: rgb(138, 185, 255);
   }
 
   ul {

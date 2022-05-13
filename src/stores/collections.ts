@@ -34,6 +34,7 @@ function createCollectionsStore() {
     return () => { unsub(); console.log("collections unsubscribe") };
   },[])
 
+  //todo: move to tdbrecord?
   function addCollection(title: string, text: string) {
     if (colref && uid) {
       addDoc(colref, {
