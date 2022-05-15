@@ -8,7 +8,6 @@ import { page } from "$app/stores";
     {path:"/planner", name:"Planner"},
     {path:"/calendar", name:"Calendar"},
     {path:"/collections", name:"Collections"},
-    {path:"/collections_new", name:"New Collections"},
   ];
 </script>
 
