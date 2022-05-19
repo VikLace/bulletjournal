@@ -18,9 +18,3 @@
     <p>no tasks found</p>
   {/if}
 </div>
-
-<style>
-  #tasks{
-    padding: 50px;
-  }
-</style>

@@ -32,7 +32,7 @@
     <div id="monthyear">
       <button on:click={() => date.addMonth(-1)}>&leftarrow;</button>
       <div>
-        {$date.toLocaleString("default", { month: "long" })}, {$date.getFullYear()}
+        {$date.toLocaleString("lv-lv", { month: "long" })}, {$date.getFullYear()}
       </div>
       <button on:click={() => date.addMonth(1)}>&rightarrow;</button>
     </div>
