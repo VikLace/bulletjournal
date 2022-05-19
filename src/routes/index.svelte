@@ -1,11 +1,3 @@
-<script lang="ts">
-  import Auth from "./../comp/Auth.svelte";
-  import { fbuser } from "./../stores/fbuser";
-</script>
-
-{#if $fbuser}
-  <h1>Welcome to Your bullet journal, {$fbuser.displayName}!</h1>
-{:else}
-  <h1>Welcome to bullet journal</h1>
-{/if}
-<Auth />
+<h1>Bakalaura darba ievads</h1>
+<p>about about about</p>
+<p>vel un vel un vel</p>
