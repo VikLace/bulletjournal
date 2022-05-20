@@ -32,7 +32,9 @@
   </div>
   <div id="days">
     {#each ["P","O","T","C","P","S","Sv"] as wd}
-    <div class="weekday">{wd}</div>
+    <div class="weekday">
+      <div class="weekday-text">{wd}</div>
+    </div>
     {/each}
     {#each days as day}
       {#if day}
@@ -44,27 +46,25 @@
           class:future={fullDays(day) > fullDays(today())}
           on:click={() => $date = day}
         >
+          {#if $month_tasks && $month_tasks.length > 0}
+            {#each $month_tasks as mday, d}
+              {#if mday && (d == day.getDate())}  
+                {#each mday as sum, t}
+                  {#if sum}
+                    <div class="agg-badge">
+                        <svg viewBox="0 0 16 16">
+                          <path fill="currentColor" d={getTaskTypeSVGPath(t)} />
+                        </svg>
+                      <div>{sum}</div>
+                    </div>
+                  {/if}
+                {/each}
+              {/if}
+            {/each}
+          {/if}
           <div class="day-text">
             {day.getDate()}
           </div>
-          {#if $month_tasks && $month_tasks.length > 0}
-            <div class="agg-badges">
-              {#each $month_tasks as mday, d}
-                {#if mday && (d == day.getDate())}  
-                  {#each mday as sum, t}
-                    {#if sum}
-                    <div class="agg-badge">
-                      <svg viewBox="0 0 16 16">
-                        <path fill="currentColor" d={getTaskTypeSVGPath(t)} />
-                      </svg>
-                      <div>{sum}</div>
-                    </div>
-                    {/if}
-                  {/each}
-                {/if}
-              {/each}
-            </div>
-          {/if}
         </div>
       {:else}
         <div class="noday" />
@@ -75,64 +75,67 @@
 
 <style>
   #monthyear {
+    height: 22px;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    padding-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+  #monthyear button{
+    margin: 0 20px;
   }
   #days {
+    width: var(--cal-size);
+    height: var(--cal-size);
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 1px 1px;
+    grid-template-rows: repeat(7, 1fr);
+    gap: 1px;
+    color: rgb(70, 70, 70);
+    border-color: rgb(70, 70, 70);
   }
   .weekday{
-    color: rgb(70, 70, 70);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .weekday-text{
+    margin-bottom: 10%;
   }
   .day {
-    --daysize: calc(20vw / 7);
-    width: var(--daysize);
-    height: var(--daysize);
-    border: 1px solid rgb(70, 70, 70);
+    border-width: 1px;
+    border-style: solid;
     user-select: none;
-    font-size: calc(var(--daysize)/2);
+    font-size: calc(var(--cal-size) / 16);
     font-weight: bolder;
     text-align: right;
     transition-duration: 300ms;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 2fr;
+    gap: 1px;
+    padding: 1px;
   }
   .past{
     color: rgb(175, 175, 175);
-  }
-  .future{
-    color: rgb(70, 70, 70);
+    border-color: rgb(175, 175, 175);
   }
   .day-text{
-    width: 70%;
-    position: relative;
-    left: 25%;
-    top: 35%;
-  }
-  .agg-badges{
-    top: -65%;
-    left: 3%;
-    height: 25%;
-    width: 90%;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
+    line-height: 100%;
+    padding-right: 3%;
+    grid-column: 1/3;
+    grid-row: 3;
   }
   .agg-badge{
+    height: calc(var(--cal-size) * 0.03); /*seems to be no other way around grid stretching...*/
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    height: 98%;
-    margin: 1%;
-    width: 48%;
-    border: 1px solid rgb(70, 70, 70);
-    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
     font-size: 40%;
   }
   .agg-badge svg{

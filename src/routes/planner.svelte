@@ -24,6 +24,7 @@
 
 <style>
   #calendar{
+    --cal-size: 30vmax;
     padding: 50px;
   }
   #planner {
