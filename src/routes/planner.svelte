@@ -9,6 +9,7 @@
     <Calendar />
   </div>
   <div id="tasks">
+    {#if $date}
     <div id="change-day">
       <button on:click={() => date.addDay(-1)}>&leftarrow;</button>
       <div>
@@ -16,6 +17,7 @@
       </div>
       <button on:click={() => date.addDay(1)}>&rightarrow;</button>
     </div>
+    {/if}
     <Tasks />
   </div>
 </div>

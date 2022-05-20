@@ -15,8 +15,8 @@ function createDateStore() {
   });
 
   const update = (fn: Updater<Date>) => {
-    fn(locDate);
-    set(locDate);
+    locDate = fn(locDate);
+    innerStore.set(locDate);
   }
 
   const set = (val: Date) => {
@@ -33,7 +33,7 @@ function createDateStore() {
       set(locDate);
       if (browser) localStorage?.removeItem("SavedDate");
     },
-    addMonth: (m: number) => innerStore.update((dt) => {
+    addMonth: (m: number) => update((dt) => {
       let nd = new Date(dt);
       nd = new Date(nd.setMonth(nd.getMonth() + m));
       if (nd.getMonth()+(nd.getFullYear()*12) != dt.getMonth()+(dt.getFullYear()*12) + m)
@@ -42,7 +42,10 @@ function createDateStore() {
       }
       return nd;
     }),
-    addDay: (d: number) => innerStore.update(dt => new Date(dt.setDate(dt.getDate() + d)))
+    addDay: (d: number) => update((dt) => {
+      let nd = new Date(dt);
+      return new Date(nd.setDate(nd.getDate() + d))
+    })
   }
 }
 

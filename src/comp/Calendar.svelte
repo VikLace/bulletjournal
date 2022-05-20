@@ -35,8 +35,8 @@
       {#if day}
         <div
           class="day"
-          class:selected={fullDays(day) == fullDays($date)}
-          class:today={fullDays(day) == fullDays(today())}
+          class:selected={fullDays(day) === fullDays($date)}
+          class:today={fullDays(day) === fullDays(today())}
           class:past={fullDays(day) < fullDays(today())}
           class:future={fullDays(day) > fullDays(today())}
           on:click={() => $date = day}
