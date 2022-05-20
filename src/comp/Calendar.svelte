@@ -31,6 +31,9 @@
     <button on:click={() => date.addMonth(1)}>&rightarrow;</button>
   </div>
   <div id="days">
+    {#each ["P","O","T","C","P","S","Sv"] as wd}
+    <div class="weekday">{wd}</div>
+    {/each}
     {#each days as day}
       {#if day}
         <div
@@ -81,6 +84,10 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px 1px;
+  }
+  .weekday{
+    color: rgb(70, 70, 70);
+    text-align: center;
   }
   .day {
     --daysize: calc(20vw / 7);
