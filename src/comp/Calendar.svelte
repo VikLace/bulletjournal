@@ -32,9 +32,7 @@
   </div>
   <div id="days">
     {#each ["P","O","T","C","P","S","Sv"] as wd}
-    <div class="weekday">
-      <div class="weekday-text">{wd}</div>
-    </div>
+    <div class="weekday">{wd}</div>
     {/each}
     {#each days as day}
       {#if day}
@@ -80,6 +78,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-bottom: 15px;
   }
   #monthyear button{
     margin: 0 20px;
@@ -89,19 +88,14 @@
     height: var(--cal-size);
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(7, 1fr);
+    grid-template-rows: 30px repeat(6, 1fr);
     gap: 1px;
     color: rgb(70, 70, 70);
     border-color: rgb(70, 70, 70);
   }
   .weekday{
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-  .weekday-text{
-    margin-bottom: 10%;
+    line-height: 30px;
   }
   .day {
     border-width: 1px;
@@ -126,9 +120,10 @@
     padding-right: 3%;
     grid-column: 1/3;
     grid-row: 3;
+    align-self: center;
   }
   .agg-badge{
-    height: calc(var(--cal-size) * 0.03); /*seems to be no other way around grid stretching...*/
+    height: calc(var(--cal-size) * 0.033); /*seems to be no other way around grid stretching...*/
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
