@@ -5,6 +5,7 @@ import { fbapp } from './fbapp';
 import { fbuser } from './fbuser';
 import { date } from './date';
 import type { TaskType } from './../types/task.type.enum';
+import { fullDays } from './../utils/utils';
 
 function createTasksStore() {
   let colref = null;
@@ -14,9 +15,9 @@ function createTasksStore() {
 
   const { subscribe } = derived<[typeof fbapp, typeof fbuser, typeof date], TTask[]>([fbapp, fbuser, date], ([$fbapp, $fbuser, $date], set) => {
     unsub();
-    if ($fbapp && $fbuser) {
+    if ($fbapp && $fbuser && $date) {
       uid = $fbuser.uid;
-      curr_date = Math.floor($date.valueOf() / 8.64e7);
+      curr_date = fullDays($date);
       colref = collection(getFirestore($fbapp), "tasks");
       const qry = query(colref, where("user_uid", "==", uid), where("date", "==", curr_date));
       unsub = onSnapshot(qry, (ss) => {
@@ -28,6 +29,7 @@ function createTasksStore() {
     else {
       colref = null;
       uid = null;
+      curr_date = null;
       set([]);
       unsub = () => { };
     }

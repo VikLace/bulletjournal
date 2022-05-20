@@ -21,6 +21,9 @@
 </div>
 
 <style>
+  #calendar{
+    padding: 50px;
+  }
   #planner {
     display: flex;
     flex-direction: row;

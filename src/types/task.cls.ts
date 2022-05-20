@@ -2,7 +2,7 @@ import type { TaskType } from "./task.type.enum";
 import { TDBRecord } from "./dbrecord.cls";
 
 export class TTask extends TDBRecord {
-  date: number; //days since epoch = Math.floor(now/8.64e7)
+  date: number; //days since epoch = utils.fullDays
   text: string;
   type: TaskType;
   done?: boolean;

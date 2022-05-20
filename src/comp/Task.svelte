@@ -81,7 +81,7 @@
 <style>
   .task-form{
     height: 26px;
-    width: 340px;
+    width: 22vw;
     display: grid;
     grid-template-columns: 1fr 10fr 1fr;
     gap: 2px;
