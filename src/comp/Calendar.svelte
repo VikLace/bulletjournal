@@ -31,7 +31,11 @@
   </div>
   <div id="days">
     {#each ["P","O","T","C","P","S","Sv"] as wd}
-    <div class="weekday">{wd}</div>
+    <div class="weekday">
+      <svg class="weekday-text" viewBox="0 0 20 13">
+        <text fill="currentColor" text-anchor="middle" x="50%" y="12">{wd}</text>
+      </svg>
+    </div>
     {/each}
     {#each days as day}
       {#if day}
@@ -64,28 +68,32 @@
 <style>
   #monthyear {
     box-sizing: border-box;
-    height: 5%;
+    height: 25px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-bottom: 15px;
   }
   #monthyear button{
     margin: 0 20px;
   }
-
   #days {
+    aspect-ratio: 1 / 1;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: 30px repeat(6, 1fr);
+    grid-template-rows: repeat(7, 1fr);
     gap: 2px;
     color: rgb(70, 70, 70);
     border-color: rgb(70, 70, 70);
   }
   .weekday{
-    text-align: center;
-    line-height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .weekday-text{
+    width: 50%;
   }
   .day {
     position: relative;

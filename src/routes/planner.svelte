@@ -31,7 +31,7 @@
 
 <style>
   #calendar{
-    width: 45%;
+    flex-grow: 1;
     background-color: bisque;
   }
   #splitter{
