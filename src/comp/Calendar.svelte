@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { month_tasks } from "./../stores/tasks_month";
+  import { month_tasks, month_tasks_count } from "./../stores/tasks_month";
   import { date, monthdate } from "./../stores/date";
   import { fullDays, today, daysInMonth } from './../utils/utils';
-  import { getTaskTypeSVGPath } from "./../types/task.type.enum";
 
   let days: Date[] = [];
 
@@ -44,25 +43,16 @@
           class:future={fullDays(day) > fullDays(today())}
           on:click={() => $date = day}
         >
-          {#if $month_tasks && $month_tasks.length > 0}
-            {#each $month_tasks as mday, d}
-              {#if mday && (d == day.getDate())}  
-                {#each mday as sum, t}
-                  {#if sum}
-                    <div class="agg-badge">
-                        <svg viewBox="0 0 16 16">
-                          <path fill="currentColor" d={getTaskTypeSVGPath(t)} />
-                        </svg>
-                      <div>{sum}</div>
-                    </div>
-                  {/if}
-                {/each}
-              {/if}
-            {/each}
-          {/if}
-          <div class="day-text">
-            {day.getDate()}
+          <svg class="day-text" viewBox="0 0 20 13">
+            <text fill="currentColor" text-anchor="end" x="100%" y="12">{day.getDate()}</text>
+          </svg>
+          {#if $month_tasks_count && $month_tasks_count.has(day.getDate())}
+          <div class="agg-badge">
+            <svg class="badge-text" viewBox="0 0 20 13">
+              <text fill="currentColor" text-anchor="middle" x="50%" y="12">{$month_tasks_count.get(day.getDate())}</text>
+            </svg>
           </div>
+          {/if}
         </div>
       {:else}
         <div class="noday" />
@@ -73,7 +63,8 @@
 
 <style>
   #monthyear {
-    height: 22px;
+    box-sizing: border-box;
+    height: 5%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -83,13 +74,12 @@
   #monthyear button{
     margin: 0 20px;
   }
+
   #days {
-    width: var(--cal-size);
-    height: var(--cal-size);
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: 30px repeat(6, 1fr);
-    gap: 1px;
+    gap: 2px;
     color: rgb(70, 70, 70);
     border-color: rgb(70, 70, 70);
   }
@@ -98,42 +88,41 @@
     line-height: 30px;
   }
   .day {
+    position: relative;
+    aspect-ratio: 1 / 1;
     border-width: 1px;
     border-style: solid;
     user-select: none;
-    font-size: calc(var(--cal-size) / 16);
-    font-weight: bolder;
-    text-align: right;
     transition-duration: 300ms;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 2fr;
-    gap: 1px;
-    padding: 1px;
   }
   .past{
     color: rgb(175, 175, 175);
     border-color: rgb(175, 175, 175);
   }
   .day-text{
-    line-height: 100%;
-    padding-right: 3%;
-    grid-column: 1/3;
-    grid-row: 3;
-    align-self: center;
+    height: 50%;
+    font-weight: bolder;
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
   }
   .agg-badge{
-    height: calc(var(--cal-size) * 0.033); /*seems to be no other way around grid stretching...*/
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
+    top: 5%;
+    left: 5%;
+    position: absolute;
+    width: 35%;
+    height: 35%;
+    box-sizing: border-box;
     border-width: 1px;
     border-style: solid;
-    border-radius: 5px;
-    font-size: 40%;
+    border-radius: 50%;
+    user-select: none;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
-  .agg-badge svg{
+  .badge-text{
     height: 80%;
   }
   .selected {

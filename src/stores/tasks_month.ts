@@ -13,7 +13,7 @@ function createMonthTasksStore() {
   let lastDay: number = null;
   let unsub = () => { };
 
-  const { subscribe } = derived<[typeof fbapp, typeof fbuser, typeof monthdate], number[][]>([fbapp, fbuser, monthdate], ([$fbapp, $fbuser, $monthdate], set) => {
+  const { subscribe } = derived<[typeof fbapp, typeof fbuser, typeof monthdate], TTask[]>([fbapp, fbuser, monthdate], ([$fbapp, $fbuser, $monthdate], set) => {
     unsub();
     if ($fbapp && $fbuser && $monthdate) {
       firstDay = fullDays(firstDayOfMonth($monthdate));
@@ -23,16 +23,8 @@ function createMonthTasksStore() {
       colref = collection(getFirestore($fbapp), "tasks");
       const qry = query(colref, where("user_uid", "==", uid), where("date", ">=", firstDay), where("date", "<=", lastDay));
       unsub = onSnapshot(qry, (ss) => {
-        let arr: number[][] = [];
-        ss.docs.forEach((d) => { 
-          let data: TTask = new TTask(d);
-          let day = new Date(new Date(0).setDate(data.date)).getDate();
-          let row = arr[day];
-          if (!row)
-            arr[day] = [];
-          let val = arr[day][data.type];
-          arr[day][data.type] = val ? ++val : 1;
-        });
+        let arr = [];
+        ss.docs.forEach((d, i) => { arr[i] = new TTask(d) });
         set(arr);
       })
     }
@@ -45,9 +37,9 @@ function createMonthTasksStore() {
       unsub = () => { };
     }
 
-    console.log("monthtasks subscribe");
+    console.log("month_tasks subscribe");
 
-    return () => { unsub(); console.log("monthtasks unsubscribe") };
+    return () => { unsub(); console.log("month_tasks unsubscribe") };
   }, [])
 
   return {
@@ -56,3 +48,34 @@ function createMonthTasksStore() {
 }
 
 export const month_tasks = createMonthTasksStore();
+
+function createMonthTasksCountStore() {
+  const { subscribe } = derived<typeof month_tasks, Map<number,number>>(month_tasks, ($month_tasks, set) => {
+    if ($month_tasks && $month_tasks.length > 0) {
+      let arr = new Map<number,number>();
+      for (const task of $month_tasks) {
+        let day = new Date(new Date(0).setDate(task.date)).getDate();
+        if (arr.has(day))
+        {
+          let val = arr.get(day);
+          arr.set(day, ++val);
+        }
+        else
+          arr.set(day, 1);
+      }
+      set(arr);
+    }
+    else
+      set(null);
+
+    console.log("month_tasks_count subscribe");
+
+    return () => { console.log("month_tasks_count unsubscribe") };
+  }, null)
+
+  return {
+    subscribe,
+  }
+}
+
+export const month_tasks_count = createMonthTasksCountStore();
