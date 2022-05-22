@@ -5,6 +5,7 @@ import { fbapp } from './fbapp';
 import { fbuser } from './fbuser';
 import { monthdate } from './date';
 import { firstDayOfMonth, fullDays, lastDayOfMonth } from './../utils/utils';
+import { curr_filter } from './curr_filter';
 
 function createMonthTasksStore() {
   let colref = null;
@@ -50,10 +51,12 @@ function createMonthTasksStore() {
 export const month_tasks = createMonthTasksStore();
 
 function createMonthTasksCountStore() {
-  const { subscribe } = derived<typeof month_tasks, Map<number,number>>(month_tasks, ($month_tasks, set) => {
+  const { subscribe } = derived<[typeof month_tasks, typeof curr_filter], Map<number,number>>([month_tasks, curr_filter], ([$month_tasks, $curr_filter], set) => {
     if ($month_tasks && $month_tasks.length > 0) {
       let arr = new Map<number,number>();
       for (const task of $month_tasks) {
+        if ($curr_filter && task.type != $curr_filter)
+          continue;
         let day = new Date(new Date(0).setDate(task.date)).getDate();
         if (arr.has(day))
         {
