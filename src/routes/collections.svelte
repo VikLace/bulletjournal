@@ -2,13 +2,15 @@
   import { TCollection } from "./../types/collection.cls";
   import { collections } from "./../stores/collections";
   import { currentError } from "./../stores/error";
+  import { ref, uploadBytes } from "firebase/storage";
+  import { fbfiles } from "./../stores/fbfiles";
 
   //todo: move req field check to tdbrecord?
   const addCollection = () => {
     if (currColl.title && currColl.text)
     {
       $currentError = null;
-      collections.addCollection(currColl.title, currColl.text);
+      collections.addCollection(currColl.title, currColl.text, xfiles);
       currColl = new TCollection();
     }
     else
@@ -44,6 +46,28 @@
   }
 
   let currColl: TCollection = new TCollection();
+
+  let files;
+  let xfiles: File[] = [];
+  const addFiles = () => {
+    if (files) { 
+      if (currColl && currColl.ref){
+        let collStorage = ref($fbfiles, currColl.id);
+        Array.from(files).forEach((f:File) => {
+          let fileStorage = ref(collStorage, f.name);
+          uploadBytes(fileStorage, f).then(() => {
+              console.log("uploaded file", f.name);
+            },
+            (error) => {
+              console.log("upload error",error.code);
+            });
+        });
+      }
+      else
+        xfiles = [...xfiles, ...files]; //save for later
+      files.clear; 
+    }
+  }
 </script>
 
 <div id="collections">
@@ -81,6 +105,26 @@
       {/if}
     </div>
     <textarea id="notes-text" spellcheck="false" placeholder="Vieta piezīmēm" bind:value={currColl.text} on:change={()=>updateCollection()}/>
+    <input type="file" multiple bind:files on:change={() => addFiles()}/>
+    {#if currColl.ref}
+      {#if currColl.files.length > 0}
+        <div>added files:</div> 
+        <ul>
+          {#each currColl.files as f}
+            <li>{f.name}</li>
+          {/each}
+        </ul>
+      {/if}
+    {:else}
+      {#if xfiles.length > 0}
+        <div>added files:</div> 
+        <ul>
+          {#each xfiles as f}
+            <li>{f.name}</li>
+          {/each}
+        </ul>
+      {/if}
+    {/if}
   </div>
   {/if}
 </div>
