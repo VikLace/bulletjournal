@@ -35,11 +35,12 @@
     background-color: bisque;
   }
   #splitter{
-    width: 10%;
+    min-width: 2%;
+    margin: 0 5%;
     background-color: gainsboro;
   }
   #tasks{
-    width: 45%;
+    min-width: 49%;
     background-color: khaki;
   }
   #planner {
@@ -48,8 +49,9 @@
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
-    padding: 3%;
+    padding: 3% 10%;
     height: 100%;
+    max-height: 84vh;
   }
   #planner>*{
     height: 100%;

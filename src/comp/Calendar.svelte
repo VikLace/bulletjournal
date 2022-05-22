@@ -78,10 +78,12 @@
     margin: 0 20px;
   }
   #days {
-    aspect-ratio: 1 / 1;
+    height: calc(100% - 25px);
+    max-height: calc(100% - 25px);
+    /*aspect-ratio: 1 / 1;*/
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(7, 1fr);
+    grid-template-rows: 30px repeat(6, 1fr);
     gap: 2px;
     color: rgb(70, 70, 70);
     border-color: rgb(70, 70, 70);
@@ -93,11 +95,11 @@
     align-items: center;
   }
   .weekday-text{
-    width: 50%;
+    height: 70%;
   }
   .day {
     position: relative;
-    aspect-ratio: 1 / 1;
+    /*aspect-ratio: 1 / 1;*/
     border-width: 1px;
     border-style: solid;
     user-select: none;
@@ -118,20 +120,20 @@
     top: 5%;
     left: 5%;
     position: absolute;
-    width: 35%;
     height: 35%;
+    aspect-ratio: 1 / 1;
     box-sizing: border-box;
     border-width: 1px;
     border-style: solid;
     border-radius: 50%;
     user-select: none;
-    text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
   .badge-text{
-    height: 80%;
+    height: 70%;
   }
   .selected {
     border-color: blueviolet;
