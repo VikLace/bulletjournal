@@ -1,4 +1,5 @@
 import { initializeApp, type FirebaseApp } from "firebase/app";
+import { emptyFunction } from "./../utils/utils";
 import { readable } from 'svelte/store';
 
 const firebaseConfig = {
@@ -10,19 +11,7 @@ const firebaseConfig = {
   appId: "1:815049421468:web:414f3732399f8b46f57359",
 };
 
-function createFirebaseApp() {
-
-  const { subscribe } = readable<FirebaseApp>(null, set => {
-    let fbapp = initializeApp(firebaseConfig);
-    set(fbapp);
-    console.log("fbapp subscribe");
-
-    return () => { console.log("fbapp unsubscribe") };
-  })
-
-  return {
-    subscribe
-  }
-}
-
-export const fbapp = createFirebaseApp();
+export const fbapp = readable<FirebaseApp>(null, set => {
+  set(initializeApp(firebaseConfig));
+  return emptyFunction;
+});

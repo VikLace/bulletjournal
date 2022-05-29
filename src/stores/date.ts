@@ -7,10 +7,8 @@ function createDateStore() {
   let locDate: Date = new Date(storedDate ? Date.parse(storedDate) : Date.now());
   
   const innerStore = writable<Date>(locDate, () => {
-    console.log("date subscribe");
     return () => {
       if (browser) localStorage.setItem("SavedDate", locDate.toDateString());
-      console.log("date unsubscribe");
     }
   });
 
@@ -43,7 +41,7 @@ function createDateStore() {
       return nd;
     }),
     addDay: (d: number) => update((dt) => {
-      let nd = new Date(dt);
+      const nd = new Date(dt);
       return new Date(nd.setDate(nd.getDate() + d))
     })
   }
@@ -58,7 +56,7 @@ function createFirstLastMonthDayStore() {
   const innerStore = derived<typeof date, Date>(date, ($date, set) => {
     console.log("firstlastmonthday subscribe");
     if ($date) {
-      let dt = fullDays($date);
+      const dt = fullDays($date);
       if (!firstDay || !lastDay || dt < firstDay || dt > lastDay)
       {
         firstDay = fullDays(firstDayOfMonth($date));

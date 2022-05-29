@@ -1,7 +1,7 @@
 export const fullDays = (dt: Date) => Math.floor(dt.valueOf() / 8.64e7) + 1; //24*60*60*1000 ms/day
 
 export const today = () => {
-  let dt = new Date();
+  const dt = new Date();
   return new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 }
 
@@ -16,3 +16,5 @@ export const daysInMonth = (m: number, y: number) => {
 export const firstDayOfMonth = (dt: Date) => new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), 1));
 
 export const lastDayOfMonth = (dt: Date) => new Date(Date.UTC(dt.getFullYear(), dt.getMonth() + 1, 0));
+
+export const emptyFunction = () => void 0;

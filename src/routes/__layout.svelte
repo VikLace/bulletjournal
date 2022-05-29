@@ -4,8 +4,8 @@
   import Error from "./../comp/Error.svelte";
 
   const menuitems = [
-    {path:"/planner", name:"Planner"},
-    {path:"/collections", name:"Collections"},
+    {path:"/planner/", name:"Planner"},
+    {path:"/collections/", name:"Collections"},
   ];
 </script>
 
@@ -34,7 +34,9 @@
 
     <ul>
       {#each menuitems as item}
-      <li class="navbar-item hoverable" class:active-menu={$page.url.pathname === item.path}><a href={item.path}>{item.name}</a></li> 
+      <li class="navbar-item hoverable" class:active-menu={$page.url.pathname == item.path}>
+        <a href={item.path}>{item.name}</a>
+      </li> 
       {/each}
     </ul>
 

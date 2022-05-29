@@ -5,13 +5,13 @@ import { fbapp } from './fbapp';
 import { fbuser } from './fbuser';
 import { date } from './date';
 import type { TaskType } from './../types/task.type.enum';
-import { fullDays } from './../utils/utils';
+import { emptyFunction, fullDays } from './../utils/utils';
 
 function createTasksStore() {
   let colref = null;
   let uid: string = null;
   let curr_date: number = null;
-  let unsub = () => { };
+  let unsub = emptyFunction;
 
   const { subscribe } = derived<[typeof fbapp, typeof fbuser, typeof date], TTask[]>([fbapp, fbuser, date], ([$fbapp, $fbuser, $date], set) => {
     unsub();
@@ -21,7 +21,7 @@ function createTasksStore() {
       colref = collection(getFirestore($fbapp), "tasks");
       const qry = query(colref, where("user_uid", "==", uid), where("date", "==", curr_date));
       unsub = onSnapshot(qry, (ss) => {
-        let arr = [];
+        const arr = [];
         ss.docs.forEach((d, i) => { arr[i] = new TTask(d) });
         set(arr);
       })
@@ -31,12 +31,10 @@ function createTasksStore() {
       uid = null;
       curr_date = null;
       set([]);
-      unsub = () => { };
+      unsub = emptyFunction;
     }
 
-    console.log("tasks subscribe");
-
-    return () => { unsub(); console.log("tasks unsubscribe") };
+    return unsub;
   }, [])
 
   function addTask(type: TaskType, text: string) {

@@ -13,10 +13,10 @@ export class TCollection extends TDBRecord {
   }
 
   public async Delete(): Promise<void> {
-    let farray = [...this.files];
+    const farray = [...this.files];
     await super.Delete().then(() => {
       farray.forEach(file => {
-        let name = file.name;
+        const name = file.name;
         deleteObject(file)
           .then(() => { console.log("deleted file", name) })
           .catch((error) => { console.log("failed to delete file", name, error.code) });
@@ -24,12 +24,12 @@ export class TCollection extends TDBRecord {
     });
   }
 
-  protected LoadAdditionalData(d: any): void {
+  protected LoadAdditionalData(d: Record<string, any>): void {
     this.title = d.title;
     this.text = d.text;
   }
 
-  protected SaveAdditionalData(): {} {
+  protected SaveAdditionalData(): Record<string, any> {
     return {
       title: this.title,
       text: this.text

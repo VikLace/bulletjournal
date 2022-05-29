@@ -1,4 +1,5 @@
 import { getStorage, ref, type StorageReference } from "firebase/storage";
+import { emptyFunction } from "./../utils/utils";
 import { derived } from 'svelte/store';
 import { fbapp } from "./fbapp";
 import { fbuser } from './fbuser';
@@ -13,8 +14,5 @@ export const fbfiles = derived<[typeof fbuser, typeof fbapp], StorageReference>(
     else {
       set(null);
     }
-
-    console.log("fbfiles subscribe");
-
-    return () => { console.log("fbfiles unsubscribe") };
+    return emptyFunction;
   }, null);

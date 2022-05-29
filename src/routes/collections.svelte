@@ -47,7 +47,8 @@
 
   let currColl: TCollection = new TCollection();
 
-  let files;
+  let dummy: string;
+  let files: FileList;
   let xfiles: File[] = [];
   const addFiles = () => {
     if (files) { 
@@ -64,8 +65,8 @@
         });
       }
       else
-        xfiles = [...xfiles, ...files]; //save for later
-      files.clear; 
+        xfiles = [...xfiles, ...Array.from(files)]; //save for later
+      dummy = "";
     }
   }
 </script>
@@ -105,7 +106,7 @@
       {/if}
     </div>
     <textarea id="notes-text" spellcheck="false" placeholder="Vieta piezīmēm" bind:value={currColl.text} on:change={()=>updateCollection()}/>
-    <input type="file" multiple bind:files on:change={() => addFiles()}/>
+    <input id="file-input" type="file" multiple bind:files bind:value={dummy} on:change={() => addFiles()}/>
     {#if currColl.ref}
       {#if currColl.files.length > 0}
         <div>added files:</div> 

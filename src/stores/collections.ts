@@ -5,12 +5,13 @@ import { fbapp } from './fbapp';
 import { fbuser } from './fbuser';
 import { fbfiles } from './fbfiles';
 import { listAll, ref, uploadBytes } from 'firebase/storage';
+import { emptyFunction } from './../utils/utils';
 
 function createCollectionsStore() {
   let fbf = null;
   let colref = null;
   let uid: string = null;
-  let unsub = () => { };
+  let unsub = emptyFunction;
 
   const { subscribe } = derived<[typeof fbapp, typeof fbuser, typeof fbfiles], TCollection[]>([fbapp, fbuser, fbfiles], ([$fbapp, $fbuser, $fbfiles], set) => {
     unsub();
@@ -20,7 +21,7 @@ function createCollectionsStore() {
       colref = collection(getFirestore($fbapp), "collections");
       const qry = query(colref, where("user_uid", "==", uid));
       unsub = onSnapshot(qry, (ss) => {
-        let cols = [];
+        const cols = [];
         ss.docs.forEach((d, i) => { 
           cols[i] = new TCollection(d);
           const listRef = ref(fbf, d.id);
@@ -31,18 +32,14 @@ function createCollectionsStore() {
         set(cols);
       })
     }
-    else
-    {
+    else {
       fbf = null;
       colref = null;
       uid = null;
       set([]);
-      unsub = () => { };
+      unsub = emptyFunction;
     }
-
-    console.log("collections subscribe");
-
-    return () => { unsub(); console.log("collections unsubscribe") };
+    return unsub;
   },[])
 
   //todo: move to tdbrecord?
@@ -55,9 +52,9 @@ function createCollectionsStore() {
         last_modified: Date.now(),
       }).then((dref) => {
         if (fbf && files && files.length > 0){
-          let collStorage = ref(fbf, dref.id);
+          const collStorage = ref(fbf, dref.id);
           files.forEach(f => {
-            let fileStorage = ref(collStorage, f.name);
+            const fileStorage = ref(collStorage, f.name);
             uploadBytes(fileStorage, f).then(() => {
                 console.log("uploaded file", f.name);
               },

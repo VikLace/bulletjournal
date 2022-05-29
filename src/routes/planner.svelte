@@ -5,7 +5,7 @@
   import Tasks from "./../comp/Tasks.svelte";
   import { TaskType, getTaskTypeSVGPath } from "./../types/task.type.enum";
 
-  let tasks_visible: boolean = true;
+  let tasks_visible = true;
 </script>
 
 <div id="planner">

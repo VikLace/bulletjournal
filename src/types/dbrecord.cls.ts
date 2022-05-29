@@ -11,21 +11,21 @@ export abstract class TDBRecord {
     {
       this.id = data.id;
       this.ref = data.ref;
-      let d = data.data();
+      const d = data.data();
       this.user_uid = d.user_uid;
       this.last_modified = d.last_modified;
       this.LoadAdditionalData(d);
     }
   }
 
-  protected abstract LoadAdditionalData(d: any): void;
-  protected abstract SaveAdditionalData(): {};
+  protected abstract LoadAdditionalData(d: Record<string, any>): void;
+  protected abstract SaveAdditionalData(): Record<string, any>;
 
   public async Delete(): Promise<void> {
     await deleteDoc(this.ref);
   }
 
-  private toUpdateData(): {}{
+  private toUpdateData(): Record<string, any>{
     return { last_modified: Date.now(), ...this.SaveAdditionalData() };
   }
 

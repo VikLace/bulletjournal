@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { month_tasks, month_tasks_count } from "./../stores/tasks_month";
+  import { month_tasks_count } from "./../stores/tasks_month";
   import { date, monthdate } from "./../stores/date";
   import { fullDays, today, daysInMonth } from './../utils/utils';
 

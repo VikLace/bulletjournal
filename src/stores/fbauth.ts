@@ -2,6 +2,7 @@ import { derived } from 'svelte/store'
 import { getAuth, type Auth } from 'firebase/auth'
 import { browser } from '$app/env'
 import { fbapp } from './fbapp';
+import { emptyFunction } from './../utils/utils';
 
 function createFirebaseAuth() {
   let fba: Auth = null;
@@ -9,8 +10,7 @@ function createFirebaseAuth() {
   const { subscribe } = derived<typeof fbapp, Auth>(fbapp, ($fbapp, set) => {
     fba = browser && $fbapp ? getAuth($fbapp) : null;
     set(fba);
-    console.log("fbauth subscribe");
-    return () => { console.log("fbauth unsubscribe") };
+    return emptyFunction;
   }, null)
 
   async function signOut() {
@@ -20,10 +20,7 @@ function createFirebaseAuth() {
     }
   }
 
-  return {
-    subscribe,
-    signOut
-  }
+  return { subscribe, signOut }
 }
 
 export const fbauth = createFirebaseAuth()
